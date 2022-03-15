@@ -42,8 +42,8 @@ public class Article {
         this.writtenTime = localDateTime;
     }
 
-    public String getFormattedWrittenTime() {
-        return writtenTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    public String getFormattedWrittenTime(String format) {
+        return writtenTime.format(DateTimeFormatter.ofPattern(format));
     }
 
 
