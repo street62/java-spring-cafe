@@ -5,10 +5,7 @@ import com.kakao.cafe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,6 +18,12 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public Object illegalStateHandler(Exception e) {
+        System.err.println(e.getMessage());
+        return "redirect:/users";
     }
 
     @GetMapping
@@ -44,12 +47,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public String viewUserInfo(@PathVariable("userId") String userId, Model model) {
-        User foundUser;
-        try {
-            foundUser = userService.findById(userId);
-        } catch (IllegalStateException e) {
-            return "redirect:/users";
-        }
+        User foundUser = userService.findById(userId);
         model.addAttribute("user", foundUser);
         return "../templates/profile";
     }

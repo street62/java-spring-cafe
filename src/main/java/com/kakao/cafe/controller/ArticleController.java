@@ -5,10 +5,7 @@ import com.kakao.cafe.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -20,6 +17,12 @@ public class ArticleController {
 
     public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public Object illegalStateHandler(Exception e) {
+        System.err.println(e.getMessage());
+        return "redirect:/";
     }
 
     @GetMapping
@@ -36,12 +39,7 @@ public class ArticleController {
 
     @GetMapping("/{articleId}")
     public String viewArticle(@PathVariable("articleId") int articleId, Model model) {
-        Article selectedArticle;
-        try {
-            selectedArticle = articleService.findById(articleId);
-        } catch (IllegalStateException e) {
-            return "redirect:/";
-        }
+        Article selectedArticle = articleService.findById(articleId);
         model.addAttribute("article", selectedArticle);
         return "/qna/show";
     }
