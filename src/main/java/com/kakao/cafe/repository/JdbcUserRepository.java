@@ -37,13 +37,6 @@ public class JdbcUserRepository implements UserRepository {
             pstmt.setString(3, user.getEmail());
 
             pstmt.executeUpdate();
-//            rs = pstmt.getGeneratedKeys();
-
-//            if (rs.next()) {
-//                user.setId(rs.getLong(1));
-//            } else {
-//                throw new SQLException("id 조회 실패");
-//            }
             return user;
         } catch (Exception e) {
             throw new IllegalStateException(e);
